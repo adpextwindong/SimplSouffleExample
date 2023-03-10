@@ -145,6 +145,42 @@ simpMain annotatedProg = S.runSouffle SIMPL $ \case
       traverse_ print stringFacts
 ```
 
+When we run this we get:
+
+```
+Prog
+  [ VarDecl
+      "notSQL"
+      (StringLit "Quick Brown Fox" ( SLOC , MkHash 1 ))
+      ( SLOC , MkHash 2 )
+  , VarDecl
+      "s"
+      (StringLit "SELECT * FROM FOO" ( SLOC , MkHash 3 ))
+      ( SLOC , MkHash 4 )
+  , Assignment
+      "s"
+      (Append
+         (Var "s" ( SLOC , MkHash 5 ))
+         (StringLit "WHERE BAR = 3" ( SLOC , MkHash 6 ))
+         ( SLOC , MkHash 7 ))
+      ( SLOC , MkHash 8 )
+  , FunctionCall
+      "execQuery"
+      (FnArgs [ Var "s" ( SLOC , MkHash 9 ) ] ( SLOC , MkHash 10 ))
+      ( SLOC , MkHash 11 )
+  ]
+SIMPL loaded
+Adding :
+StringFact (MkHash 1) "Quick Brown Fox"
+Adding :
+StringFact (MkHash 3) "SELECT * FROM FOO"
+
+Datalog Facts
+SQL Const Facts:
+SQLConst (MkHash 3)
+```
+
+
 ### Note
 
 `souffle-haskell` has a Marshal typeclass that leverages GHC.Generics to marshal data to and from Datalog. It can figure out how to derive marshaling for product types but not sum types at the moment. In our example we use a seperate `StringFact` type seperate from `Expr` to get around this. This type must be laid out in the same order as your datalog declaration:
