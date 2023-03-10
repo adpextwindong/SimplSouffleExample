@@ -1,0 +1,17 @@
+//Input facts
+
+//Conventions: Node Id's are unsigned
+//             Identifiers are symbols
+//             Every AST node has a node_id
+
+//Expr
+.decl lit_string(node_id: unsigned, value: symbol)
+
+.decl sqlConst(node: unsigned)
+
+.input lit_string
+.output sqlConst
+
+sqlConst(node) :-
+  lit_string(node, value),
+  contains("SELECT", value).
